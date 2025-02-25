@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>ARSEN777 ZALUPA228</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            cursor: pointer; /* Рука при наведении */
+        }
+
+        body {
+            background: url('https://1shelk.github.io/nfc-music/radin.jpg') no-repeat center center fixed;
+            background-size: cover;
+            height: 100vh;
+            position: relative;
+        }
+
+        /* Индикатор воспроизведения (опционально) */
+        .status {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            color: white;
+            font-size: 24px;
+            text-shadow: 2px 2px 4px black;
+            font-family: Arial;
+            opacity: 0.7;
+        }
+
+        #hidden-player {
+            display: none;
+        }
+    </style>
+</head>
+<body onclick="togglePlay()">
+    <audio id="hidden-player">
+        <source src="https://1shelk.github.io/nfc-music/zalupa.mp3" type="audio/mpeg">
+    </audio>
+
+    <!-- Текст-индикатор (можно удалить) -->
+    <div class="status" id="status">▶️</div>
+
+    <script>
+        const player = document.getElementById('hidden-player');
+        const status = document.getElementById('status');
+
+        function togglePlay() {
+            if (player.paused) {
+                player.play();
+                status.textContent = '⏸️';
+            } else {
+                player.pause();
+                status.textContent = '▶️';
+            }
+        }
+
+        // Автоперезапуск при окончании трека
+        player.addEventListener('ended', () => {
+            status.textContent = '▶️';
+        });
+    </script>
+</body>
+</html>
