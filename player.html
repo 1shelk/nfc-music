@@ -1,13 +1,13 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>ZALUPA</title>
+    <title>ARSEN777 ZALUPA228</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <style>
         * {
             margin: 0;
             padding: 0;
-            box-sizing: border-box;
+            cursor: pointer; /* Рука при наведении */
         }
 
         body {
@@ -17,61 +17,49 @@
             position: relative;
         }
 
-        .play-btn {
+        /* Индикатор воспроизведения (опционально) */
+        .status {
             position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: rgba(0,0,0,0.3); /* Полупрозрачная затемняющая подложка */
-            border: none;
-            cursor: pointer;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            transition: 0.3s;
-        }
-
-        .play-btn:hover {
-            background: rgba(0,0,0,0.5);
-        }
-
-        .play-text {
+            bottom: 20px;
+            right: 20px;
             color: white;
-            font-size: 3em;
-            text-shadow: 2px 2px 4px rgba(0,0,0,0.5);
-            font-family: Arial, sans-serif;
-            padding: 20px;
-            border: 3px solid white;
-            border-radius: 15px;
-            background: rgba(0,0,0,0.2);
+            font-size: 24px;
+            text-shadow: 2px 2px 4px black;
+            font-family: Arial;
+            opacity: 0.7;
         }
 
-        /* Скрываем стандартный плеер */
         #hidden-player {
             display: none;
         }
     </style>
 </head>
-<body>
-    <!-- Скрытый аудиоплеер -->
+<body onclick="togglePlay()">
     <audio id="hidden-player">
         <source src="https://1shelk.github.io/nfc-music/zalupa.mp3" type="audio/mpeg">
     </audio>
 
-    <!-- Кнопка-оверлей -->
-    <button class="play-btn" onclick="playMusic()">
-        <div class="play-text">▶️ PLAY</div>
-    </button>
+    <!-- Текст-индикатор (можно удалить) -->
+    <div class="status" id="status">▶️</div>
 
     <script>
-        function playMusic() {
-            const player = document.getElementById('hidden-player');
-            player.play();
-            
-            // Скрываем кнопку после нажатия
-            document.querySelector('.play-btn').style.display = 'none';
+        const player = document.getElementById('hidden-player');
+        const status = document.getElementById('status');
+
+        function togglePlay() {
+            if (player.paused) {
+                player.play();
+                status.textContent = '⏸️';
+            } else {
+                player.pause();
+                status.textContent = '▶️';
+            }
         }
+
+        // Автоперезапуск при окончании трека
+        player.addEventListener('ended', () => {
+            status.textContent = '▶️';
+        });
     </script>
 </body>
 </html>
