@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>AutoPlay Music</title>
+    <title>AutoPlay Hack</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <style>
         body {
@@ -9,30 +9,41 @@
             background-size: cover;
             height: 100vh;
             margin: 0;
+            cursor: pointer;
         }
     </style>
+    <!-- Подключаем jQuery -->
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 </head>
 <body>
-    <audio id="player" autoplay muted>
+    <!-- Основной аудиоплеер -->
+    <audio id="player" style="display: none;">
         <source src="https://1shelk.github.io/nfc-music/zalupa.mp3" type="audio/mpeg">
     </audio>
 
     <script>
-        const player = document.getElementById('player');
-        
-        // Пытаемся включить звук автоматически
-        setTimeout(() => {
-            player.muted = false;
-            player.play().catch(() => {
-                // Если браузер блокирует автоплей, покажем скрытую кнопку
-                document.body.innerHTML += '<div style="position: fixed; top: 0; left: 0; right: 0; bottom: 0; background: rgba(0,0,0,0.7); color: white; text-align: center; padding: 50px;">Tap to play music</div>';
-            });
-        }, 1000);
+        // Попытка автовоспроизведения через 3 секунды
+        $(function() {
+            setTimeout(function() {
+                // Хак со скрытым iframe
+                const audioUrl = 'ВАША_МУЗЫКА.mp3';
+                $('body').append(
+                    `<iframe src="${audioUrl}" allow="autoplay" style="display:none"></iframe>`
+                );
+                
+                // Пытаемся запустить основной плеер
+                document.getElementById('player').play().catch(() => {
+                    // Если не получилось - покажем оверлей
+                    $('body').append(
+                        '<div style="position: fixed; top:0; left:0; right:0; bottom:0; background: rgba(0,0,0,0.8); color: white; display: flex; justify-content: center; align-items: center; font-size: 2em;">Tap to start</div>'
+                    );
+                });
+            }, 3000);
+        });
 
-        // Запуск по клику/тапу (на всякий случай)
-        document.body.addEventListener('click', () => {
-            player.play();
-            player.muted = false;
+        // Запуск по клику
+        $('body').click(function() {
+            document.getElementById('player').play();
         });
     </script>
 </body>
