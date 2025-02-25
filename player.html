@@ -5,58 +5,57 @@
         body {
             margin: 0;
             height: 100vh;
-            display: flex;
-            align-items: center;
-            justify-content: center;
+            overflow: hidden;
             background: black;
-            cursor: pointer;
         }
         
-        #triggerImage {
-            max-width: 100%;
-            max-height: 100%;
-            opacity: 0.001;
-            transition: opacity 0.3s;
+        #videoTrigger {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            opacity: 0.0001;
         }
     </style>
 </head>
 <body>
-    <!-- Невидимое изображение-триггер -->
-    <img id="triggerImage" src="https://1shelk.github.io/nfc-music/radin.jpg" alt="trigger">
+    <!-- Невидимое видео с muted -->
+    <video id="videoTrigger" autoplay muted playsinline>
+        <source src="'https://1shelk.github.io/nfc-music/placeholder.mp4" type="video/mp4">
+    </video>
 
-    <!-- Скрытый аудио-элемент -->
+    <!-- Основной аудио-плеер -->
     <audio id="audioPlayer" loop>
-        <source src="https://1shelk.github.io/nfc-music/zalupa.mp3" type="audio/mpeg">
+        <source src="'https://1shelk.github.io/nfc-music/zalupa.mp3" type="audio/mpeg">
     </audio>
 
     <script>
         const audio = document.getElementById('audioPlayer');
-        const image = document.getElementById('triggerImage');
+        const video = document.getElementById('videoTrigger');
 
-        // Первая попытка: запуск при полной загрузке страницы
-        window.addEventListener('load', () => {
-            audio.play().catch(error => {
-                console.log('Autoplay blocked:', error);
-            });
+        // Стратегия 1: Попытка запуска через событие loadedmetadata
+        video.addEventListener('loadedmetadata', () => {
+            audio.play().catch(e => console.log('Autoplay attempt 1 failed'));
         });
 
-        // Вторая попытка: запуск при загрузке изображения
-        image.addEventListener('load', () => {
-            audio.play().catch(error => {
-                console.log('Image load autoplay blocked:', error);
+        // Стратегия 2: Запуск через таймаут с имитацией взаимодействия
+        setTimeout(() => {
+            video.play().then(() => {
+                audio.play().catch(e => console.log('Autoplay attempt 2 failed'));
             });
-        });
-
-        // Третья попытка: симуляция клика по странице
-         setTimeout(() => {
-            document.body.click();
         }, 1000);
 
-        // Обработчик для ручного запуска
-        document.body.addEventListener('click', () => {
-            audio.play().catch(() => {});
-            image.style.opacity = '0';
+        // Стратегия 3: Активация при любом взаимодействии
+        document.addEventListener('click', () => {
+            audio.play().catch(e => console.log('Manual play failed'));
+            video.style.opacity = '0';
         });
+
+        // Дополнительные условия для улучшения совместимости
+        window.onload = function() {
+            if (typeof video.play === 'function') {
+                video.play();
+            }
+        };
     </script>
 </body>
 </html>
