@@ -14,7 +14,6 @@
             background: url('https://1shelk.github.io/nfc-music/radin.jpg') no-repeat center center fixed;
             background-size: cover;
             height: 100vh;
-            position: relative;
         }
 
         #hidden-player {
@@ -22,24 +21,27 @@
         }
     </style>
 </head>
-<body onclick="togglePlay()">
-    <audio id="hidden-player">
+<body onclick="startPlayback()"> <!-- Изменено имя функции -->
+    <audio id="hidden-player" loop> <!-- Добавлен атрибут loop -->
         <source src="https://1shelk.github.io/nfc-music/zalupa.mp3" type="audio/mpeg">
     </audio>
 
     <script>
         const player = document.getElementById('hidden-player');
+        let isPlaying = false;
 
-        function togglePlay() {
-            if (player.paused) {
+        function startPlayback() {
+            if (!isPlaying) {
                 player.play();
-            } else {
-                player.pause();
+                isPlaying = true;
+                // Удаляем обработчик клика после первого нажатия
+                document.body.onclick = null;
             }
         }
 
-        player.addEventListener('ended', () => {
-            player.currentTime = 0;
+        // Автоповтор при ошибках (опционально)
+        player.addEventListener('pause', () => {
+            if (isPlaying) player.play();
         });
     </script>
 </body>
