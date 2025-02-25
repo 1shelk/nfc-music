@@ -4,8 +4,8 @@ self.addEventListener('install', (event) => {
             return cache.addAll([
                 '/',
                 '/index.html',
-                '/music.mp3',
-                '/photo.jpg',
+                '/zalupa.mp3',
+                '/radin.jpg',
                 '/app.js'
             ]);
         })
