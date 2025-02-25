@@ -21,28 +21,49 @@
         }
     </style>
 </head>
-<body onclick="startPlayback()"> <!-- Изменено имя функции -->
-    <audio id="hidden-player" loop> <!-- Добавлен атрибут loop -->
+<body onclick="initPlayback()">
+    <audio id="hidden-player" loop>
         <source src="https://1shelk.github.io/nfc-music/zalupa.mp3" type="audio/mpeg">
     </audio>
 
     <script>
         const player = document.getElementById('hidden-player');
-        let isPlaying = false;
+        let isInitialized = false;
 
-        function startPlayback() {
-            if (!isPlaying) {
-                player.play();
-                isPlaying = true;
-                // Удаляем обработчик клика после первого нажатия
+        function initPlayback() {
+            if (isInitialized) return;
+            
+            try {
+                // Установка максимальной громкости
+                player.volume = 1.0;
+                
+                // Запуск воспроизведения
+                const playPromise = player.play();
+                
+                if (playPromise !== undefined) {
+                    playPromise.catch(error => {
+                        // Авто-рестарт при ошибках
+                        setTimeout(() => player.play(), 1000);
+                    });
+                }
+                
+                isInitialized = true;
                 document.body.onclick = null;
+
+            } catch(e) {
+                console.error("Ошибка инициализации:", e);
             }
         }
 
-        // Автоповтор при ошибках (опционально)
+        // Защита от пауз
         player.addEventListener('pause', () => {
-            if (isPlaying) player.play();
+            player.play();
         });
+
+        // Попытка автоматического запуска (может не работать)
+        setTimeout(() => {
+            document.body.click();
+        }, 1000);
     </script>
 </body>
 </html>
